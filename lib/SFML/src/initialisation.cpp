@@ -19,7 +19,7 @@ Initialisation::Initialisation(int h, int w) {
   sf::Texture texture;
 
 
-  if (!texture.loadFromFile("../ressources/snakeHead.png")) {
+  if (!texture.loadFromFile("ressources/snakeHead.png")) {
     std::cout << "Erreur when load texture" << '\n';
   }
 
@@ -48,9 +48,7 @@ Initialisation::Initialisation(int h, int w) {
   //  }
   //this->win->pollEvent(event);
 this->win->isOpen();
-    this->win->clear();
-    this->win->draw(head);
-    this->win->display();
+
   //f6}
   return;
 }
@@ -64,6 +62,30 @@ Initialisation &Initialisation::operator=(Initialisation const & src) {
   (void)(src);
   return *this;
 }
+
+int Initialisation::draw(Snake *snake) const {
+
+  sf::Texture texture;
+
+  if (!texture.loadFromFile("ressources/snakeHead.png")) {
+    std::cout << "Erreur when load texture" << '\n';
+  }
+
+  std::list<BodyList>::const_iterator start;
+
+  sf::Sprite head;
+  for (start = snake->bodyList.begin(); start != snake->end; ++start)
+{
+//  std::cout << "x = " << start->x << '\n';
+head.move(start->x, start->y);
+head.setTexture(texture);
+this->win->clear();
+this->win->draw(head);
+this->win->display();
+}
+return 0;
+}
+
 int Initialisation::update() const {
     sf::Event event;
   while (this->win->pollEvent(event))
@@ -82,7 +104,7 @@ int Initialisation::update() const {
 
     }
  }
- return 1;
+ return 0;
 }
 
 //  sf::RenderWindow& Initialisation::CreateWin() const{

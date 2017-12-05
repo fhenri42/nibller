@@ -30,15 +30,27 @@ int main (int argc, char **argv) {
 
   for (start = snake->bodyList.begin(); start != snake->end; ++start)
 {
-  //std::cout << start->x << '\n';
+  std::cout << "x = " << start->x << '\n';
 }
-return 0;
 
   while (order != -1) {
 
-    order = game->update();
     if (order == 1) {
       /* code */
+    }
+    game->draw(snake);
+    order = game->update();
+    if (order == 1) {
+      std::cout << "in order 1" << '\n';
+       for (start = snake->bodyList.begin(); start != snake->end; ++start)
+     {
+       BodyList tmpBody;
+       tmpBody.x = 10 + start->x;
+       tmpBody.y = start->y;
+       tmpBody.type ="head";
+       snake->bodyList.pop_back();
+       snake->bodyList.push_back(tmpBody);
+     }
     }
     //std::cout << "continu"<<continu << '\n';
   }

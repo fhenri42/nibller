@@ -8,6 +8,7 @@
 #include <sstream>
 #include "GameInterface.hpp"
 #include <SFML/Graphics.hpp>
+#include "../../../include/snake.hpp"
 
 class Initialisation : public GameInterface {
 
@@ -20,6 +21,7 @@ public:
 
   Initialisation &operator=(Initialisation const & src);  // operator d'affecationt
   int update() const;
+  int draw(Snake *snake) const;
 private:
   int h;
   int w;
