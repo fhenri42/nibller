@@ -3,6 +3,8 @@
 
 
 #include "initialisation.hpp"
+#include <future>
+#include <unistd.h>
 
 Initialisation::Initialisation(void){
   //  sf::RenderWindow win(sf::VideoMode(500, 500), "SFML Test");
@@ -15,6 +17,7 @@ Initialisation::Initialisation(int h, int w) {
   this->w = w;
   this->win = new sf::RenderWindow(sf::VideoMode(w, h), "SFML Test");
   this->event = new sf::Event();
+  this->lastOrder = 1;
 
   sf::Texture texture;
 
@@ -24,32 +27,9 @@ Initialisation::Initialisation(int h, int w) {
   }
 
   sf::Sprite head;
-//  sf::Event event;
   head.setTexture(texture);
+  this->win->isOpen();
 
-//  while (this->win->isOpen()) {
-    // while (this->win->pollEvent(event))
-    // {
-    //   if (event.type == sf::Event::Closed)
-    //   {
-    //     this->win->close();
-    //   }
-    //   if (event.type == sf::Event::KeyPressed) {
-    //     if (event.key.code == sf::Keyboard::Escape) { this->win->close(); }
-    //     if (event.key.code == 74) {
-    //       std::cout << "keycode = " << event.key.code<< '\n';
-    //       this->win->clear();
-    //       sprite.move(0, 10);
-    //       this->win->draw(sprite);
-    //       this->win->display();
-    //     }
-    //
-    //   }
-  //  }
-  //this->win->pollEvent(event);
-this->win->isOpen();
-
-  //f6}
   return;
 }
 
@@ -63,48 +43,60 @@ Initialisation &Initialisation::operator=(Initialisation const & src) {
   return *this;
 }
 
+
+int Initialisation::interval(int order) const {
+
+usleep(50000);
+return order;
+}
+
 int Initialisation::draw(Snake *snake) const {
 
-  sf::Texture texture;
+  sf::Texture textureHead;
+  sf::Texture textureBody;
 
-  if (!texture.loadFromFile("ressources/snakeHead.png")) {
-    std::cout << "Erreur when load texture" << '\n';
+  if (!textureHead.loadFromFile("ressources/snakeHead.png")) {
+    std::cout << "Erreur when load textureHead" << '\n';
   }
 
+  if (!textureBody.loadFromFile("ressources/order_background.jpg")) {
+    std::cout << "Erreur when load textureBody" << '\n';
+  }
   std::list<BodyList>::const_iterator start;
 
-  sf::Sprite head;
+  this->win->clear();
   for (start = snake->bodyList.begin(); start != snake->end; ++start)
-{
-//  std::cout << "x = " << start->x << '\n';
-head.move(start->x, start->y);
-head.setTexture(texture);
-this->win->clear();
-this->win->draw(head);
-this->win->display();
+  {
+    sf::Sprite snakeText;
+    snakeText.move(start->x, start->y);
+    if (start->type == "head") { snakeText.setTexture(textureHead);}
+    else { snakeText.setTexture(textureBody); }
+    this->win->draw(snakeText);
+  }
+  this->win->display();
+  return 0;
 }
-return 0;
+void Initialisation::updateLastOrder(int order) {
+  this->lastOrder = order;
 }
 
 int Initialisation::update() const {
-    sf::Event event;
+  sf::Event event;
   while (this->win->pollEvent(event))
   {
     if (event.type == sf::Event::Closed) { this->win->close(); return -1; }
     if (event.type == sf::Event::KeyPressed) {
       if (event.key.code == sf::Keyboard::Escape) { this->win->close(); return -1; }
-      if (event.key.code == 74) {
-        std::cout << "keycode = " << event.key.code<< '\n';
-        return 1;
-        // this->win->clear();
-        // sprite.move(0, 10);
-        // this->win->draw(sprite);
-        // this->win->display();
-      }
+      //std::cout << "keycode = " << event.key.code<< '\n';
+      if (event.key.code == 74) { const_cast<Initialisation*>(this)->updateLastOrder(1); return 1; }
+      if (event.key.code == 73) { const_cast<Initialisation*>(this)->updateLastOrder(2); return 2; }
+      if (event.key.code == 71) { const_cast<Initialisation*>(this)->updateLastOrder(3); return 3; }
+      if (event.key.code == 72) { const_cast<Initialisation*>(this)->updateLastOrder(4); return 4; }
 
     }
- }
- return 0;
+  }
+
+  return this->interval(100);
 }
 
 //  sf::RenderWindow& Initialisation::CreateWin() const{

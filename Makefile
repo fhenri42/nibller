@@ -2,7 +2,7 @@ EXEC = bin/nibbler
 
 INC	= -I include
 
-SRC = main.cpp snake.cpp
+SRC = main.cpp snake.cpp game.cpp
 
 OBJ	= $(SRC:%.cpp=obj/%.o)
 

@@ -13,6 +13,7 @@ public:
   //virtual sf::RenderWindow& CreateWin() const = 0;
   virtual int update() const = 0;
   virtual int draw(Snake *part) const = 0;
+  virtual int interval(int order) const = 0;
 
 };
 

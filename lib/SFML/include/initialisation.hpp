@@ -22,11 +22,14 @@ public:
   Initialisation &operator=(Initialisation const & src);  // operator d'affecationt
   int update() const;
   int draw(Snake *snake) const;
+  int interval(int order) const;
+  void updateLastOrder(int order);
 private:
   int h;
   int w;
   sf::RenderWindow *win;
   sf::Event *event;
+  int lastOrder;
 
 };
 
