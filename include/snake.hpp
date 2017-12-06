@@ -25,7 +25,7 @@ public:
   std::list<BodyList>::iterator end;
 
   Snake(void);
-  Snake(int x, int y);
+  Snake(int w, int h);
   Snake(Snake const &src); // Copy
   ~Snake(void); // Destructeur de recopie
   std::list<BodyList>::iterator  nord(std::list<BodyList>::iterator body);

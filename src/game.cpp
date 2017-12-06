@@ -20,7 +20,7 @@ Game::~Game(void) {
 
 void Game::current(GameInterface *iGame,int w, int h) {
 
-  Snake         *snake = new Snake(150, 150);
+  Snake         *snake = new Snake(w, h);
 
   int order = 100;
   iGame->draw(snake);
@@ -34,6 +34,5 @@ void Game::current(GameInterface *iGame,int w, int h) {
     else if (order == 4) { snake->movement(4,w, h); order = 100; }
     else if (order == 100) { snake->movement(100,w ,h); }
     if (order != 0) { iGame->draw(snake); }
-    //std::cout << "continu"<<continu << '\n';
   }
 }

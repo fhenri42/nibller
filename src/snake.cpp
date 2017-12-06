@@ -12,22 +12,22 @@ Snake::Snake(void){
   return;
 }
 
-Snake::Snake(int x, int y) {
+Snake::Snake(int w, int h) {
   BodyList tmp;
   tmp.type = "head";
-  tmp.x = x;
-  tmp.y = y;
+  tmp.x = w/2;
+  tmp.y = h/2;
   tmp.dirrection = "S";
   this->bodyList.push_back(tmp);
-  for (size_t i = 0; i < 17; i++) {
+  for (size_t i = 0; i < 4; i++) {
     tmp.type = "body";
-    tmp.x = x;
+    tmp.x = w/2;
     tmp.y = tmp.y - 8;
     this->bodyList.push_back(tmp);
   }
   tmp.type = "fruit";
-  tmp.x = rand() % 1000;
-  tmp.y = rand() % 1000;
+  tmp.x = rand() % w;
+  tmp.y = rand() % h;
   this->bodyList.push_back(tmp);
 
   this->end = this->bodyList.end();
@@ -100,8 +100,8 @@ void Snake::movement(int wich, int w, int h) {
 
     } else if (start->type == "fruit") {
       if (newHeadPose.x <= start->x + 10 && newHeadPose.x >= start->x - 10  && newHeadPose.y <= start->y + 10 && newHeadPose.y >= start->y - 10) {
-        start->x = rand() % 1000;
-        start->y = rand() % 1000;
+        start->x = rand() % w;
+        start->y = rand() % h;
         BodyList last  = this->bodyList.back();
         BodyList tmp;
         tmp.type = "body";
@@ -125,8 +125,5 @@ void Snake::movement(int wich, int w, int h) {
           exit(EXIT_FAILURE);
       }
     }
-    //  std::cout << start->dirrection<< '\n';
   }
-  //std::cout << "=====================" << '\n' << "===================";
-
 }

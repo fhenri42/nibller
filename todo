@@ -1,4 +1,5 @@
 Makefile des lib est du code
 
-1) faire fonciton de base de la SFML
-2) faire le code basique du sneack
+1) faire un menu.
+2) faire une seconde librairie.
+3) faire le bouton pour linker les deus.
