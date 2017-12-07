@@ -6,8 +6,8 @@
 
 #include <iostream>
 #include <sstream>
-#include "GameInterface.hpp"
 #include <SFML/Graphics.hpp>
+#include "../../../include/gameInterface.hpp"
 #include "../../../include/snake.hpp"
 
 class Initialisation : public GameInterface {
@@ -23,19 +23,23 @@ public:
   int update() const;
   int draw(Snake *snake) const;
   int interval(int order) const;
-  void updateLastOrder(int order);
+  int drawMenu () const;
+  void updateIsStart();
+  //void stopGame () const;
 private:
   int h;
   int w;
   sf::RenderWindow *win;
   sf::Event *event;
-  int lastOrder;
+  bool isStart;
 
 };
 
 
 extern "C" {
-  Initialisation *createBorde(int h, int w);
+  Initialisation *createBorde(int w, int h);
+
+  void            stopGame(Initialisation *game);
 }
 
 #endif

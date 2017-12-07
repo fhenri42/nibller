@@ -8,6 +8,7 @@ Snake::Snake(void){
   this->bodyList.push_back(tmp);
   this->end = this->bodyList.end();
   this->start = this->bodyList.begin();
+  this->isRestart = false;
 
   return;
 }
@@ -22,17 +23,19 @@ Snake::Snake(int w, int h) {
   for (size_t i = 0; i < 4; i++) {
     tmp.type = "body";
     tmp.x = w/2;
-    tmp.y = tmp.y - 8;
+    tmp.y = tmp.y -20;
     this->bodyList.push_back(tmp);
   }
   tmp.type = "fruit";
-  tmp.x = rand() % w;
-  tmp.y = rand() % h;
+  tmp.x = rand() % (w - 20 + 1) + 20;
+  tmp.y = rand() % (h - 20 + 1) + 20;
   this->bodyList.push_back(tmp);
 
   this->end = this->bodyList.end();
   this->start = this->bodyList.begin();
   this->reapt = &Snake::south;
+  this->isRestart = false;
+  this->score = 0;
   return;
 }
 
@@ -52,21 +55,21 @@ Snake::~Snake(void) {
 }
 
 std::list<BodyList>::iterator Snake::nord(std::list<BodyList>::iterator body) {
-  body->y = body->y - 10;
+  body->y = body->y - 20;
   return body;
 }
 std::list<BodyList>::iterator Snake::south(std::list<BodyList>::iterator body) {
-  body->y = body->y + 10;
+  body->y = body->y + 20;
   return body;
 }
 
 std::list<BodyList>::iterator Snake::east(std::list<BodyList>::iterator body) {
-  body->x = body->x + 10;
+  body->x = body->x + 20;
   return body;
 }
 
 std::list<BodyList>::iterator Snake::ouest(std::list<BodyList>::iterator body) {
-  body->x = body->x - 10;
+  body->x = body->x - 20;
   return body;
 }
 
@@ -91,17 +94,17 @@ void Snake::movement(int wich, int w, int h) {
       else { start = (this->*reapt)(start); }
       newHeadPose.x = start->x;
       newHeadPose.y = start->y;
-      if(newHeadPose.x < 0 || newHeadPose.y < 0 || newHeadPose.x > w || newHeadPose.y > h ) {
+      if(newHeadPose.x < 20 || newHeadPose.y < 20 || newHeadPose.x > w - 20 || newHeadPose.y > h -20 ) {
         std::cout << w << '\n';
         std::cout << h << '\n';
         std::cout << "Sorti de map" << '\n';
-          exit(EXIT_FAILURE);
+        this->isRestart = true;
       }
 
     } else if (start->type == "fruit") {
-      if (newHeadPose.x <= start->x + 10 && newHeadPose.x >= start->x - 10  && newHeadPose.y <= start->y + 10 && newHeadPose.y >= start->y - 10) {
-        start->x = rand() % w;
-        start->y = rand() % h;
+      if (newHeadPose.x <= start->x + 20 && newHeadPose.x >= start->x - 20  && newHeadPose.y <= start->y + 20 && newHeadPose.y >= start->y - 20) {
+        start->x = rand() % (w - 20 + 1) + 20;
+        start->y = rand() % (h - 20 + 1) + 20;
         BodyList last  = this->bodyList.back();
         BodyList tmp;
         tmp.type = "body";
@@ -111,6 +114,7 @@ void Snake::movement(int wich, int w, int h) {
         if (last.dirrection == "O") { tmp.x = last.x - 8; tmp.y = last.y; }
 
         this->bodyList.push_back(tmp);
+        this->score = this->score + 10;
       }
 
     } else {
@@ -120,9 +124,9 @@ void Snake::movement(int wich, int w, int h) {
       tmpMaille.y = start->y;
       start->x = x;
       start->y = y;
-      if (newHeadPose.x <= tmpMaille.x + 5 && newHeadPose.x >= tmpMaille.x  - 5  && newHeadPose.y <= tmpMaille.y  + 5 && newHeadPose.y >= tmpMaille.y - 5) {
+      if (newHeadPose.x <= tmpMaille.x + 0 && newHeadPose.x >= tmpMaille.x  - 0  && newHeadPose.y <= tmpMaille.y  + 0 && newHeadPose.y >= tmpMaille.y - 0) {
         std::cout << "on ce mange la que" << '\n';
-          exit(EXIT_FAILURE);
+        this->isRestart = true;
       }
     }
   }

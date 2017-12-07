@@ -1,16 +1,9 @@
 # ifndef GAME_HPP
 # define GAME_HPP
 
-#include <string>
-#include <list>
 
-#include <iostream>
-#include <sstream>
-#include <regex>
-#include <limits>
-#include "snake.hpp"
-#include "../lib/SFML/include/GameInterface.hpp"
-
+#include <dlfcn.h>
+#include "gameInterface.hpp"
 
 class Game {
 
@@ -20,8 +13,8 @@ public:
   Game(int x, int y);
   Game(Game const &src); // Copy
   ~Game(void); // Destructeur de recopie
-
-  void current(GameInterface *iGame, int w, int h);
+  GameInterface *realoadLib(int w, int h);
+  void current(GameInterface *iGame, void (*dell)(GameInterface*),int w, int h);
   Game &operator=(Game const & src);  // operator d'affecationt
 
 };

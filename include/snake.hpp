@@ -3,11 +3,9 @@
 
 #include <string>
 #include <list>
-
 #include <iostream>
 #include <sstream>
-#include <regex>
-#include <limits>
+
 
 struct BodyList
 {
@@ -36,7 +34,8 @@ public:
   std::list<BodyList>::iterator  (Snake::*reapt)(std::list<BodyList>::iterator body);
   void movement(int wich, int w, int h);
   Snake &operator=(Snake const & src);  // operator d'affecationt
-
+  bool isRestart;
+  int score;
 };
 
 #endif

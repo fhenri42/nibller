@@ -12,7 +12,7 @@ FLAG = -Wall -Werror -Wextra
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(COMPILE) $(FLAG) -o $@ $(OBJ) $(LIB)
+	$(COMPILE) $(FLAG) -o $@ $(OBJ) $(LIB) && sh script.sh
 
 %.o: src/%.cpp
 	@echo -n  $< :
