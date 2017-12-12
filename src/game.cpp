@@ -24,7 +24,7 @@ GameInterface *Game::realoadLib(int w, int h) {
   GameInterface *iGame;
   Game          game;
 
-  dlHandle = dlopen("lib/SFML/bin/sfml.so", RTLD_LAZY | RTLD_LOCAL);
+  dlHandle = dlopen(this->currentLib.c_str(), RTLD_LAZY | RTLD_LOCAL);
   init = (GameInterface*(*)(int, int))dlsym(dlHandle, "createBorde");
   iGame = init(w, h);
   return iGame;
@@ -36,20 +36,17 @@ void Game::current(GameInterface *iGame, void (*dell)(GameInterface*), int w, in
   Snake         *snake = new Snake(w, h);
 
   int order = -2;
-  //iGame->draw(snake);
   while (order != -1) {
 
     order = iGame->update();
-    //std::cout << order << '\n';
-    if (snake->isRestart) {
-      //  iGame->stopGame();
+    if (snake->isRestart || order == 200 || order == 201 || order == 202) {
+      if (order == 200) { this->currentLib = "lib/SFML/bin/sfml.so"; }
+      if (order == 201) { this->currentLib = "lib/SDL/bin/sdl.so"; }
       dell(iGame);
       iGame = this->realoadLib(w, h);
       snake->isRestart = false;
       snake = new Snake(w, h);
       order = -2;
-
-    //  exit(EXIT_FAILURE);
     }
 
     if (order >= 0) {
@@ -58,10 +55,11 @@ void Game::current(GameInterface *iGame, void (*dell)(GameInterface*), int w, in
       else if (order == 3) { snake->movement(3,w, h); }
       else if (order == 4) { snake->movement(4,w, h); }
       else if (order == 100) { snake->movement(100,w ,h); }
-      if (order != 0) { iGame->draw(snake); }
+     if (order != 0) { iGame->draw(snake); }
     } else {
       iGame->drawMenu();
     }
+
   }
 
 }

@@ -21,7 +21,7 @@ int main (int argc, char **argv) {
   if (atoi(argv[2]) < 300 || atoi(argv[2]) > 1000 || atoi(argv[3]) < 300 || atoi(argv[3]) > 1000 ) { std::cout << "W or H must be beetween 300 and 1000" << '\n'; return 0; }
 
   dlHandle = dlopen(argv[1], RTLD_LAZY | RTLD_LOCAL);
-
+  game.currentLib = argv[1];
   init = (GameInterface*(*)(int, int))dlsym(dlHandle, "createBorde");
 
   dell = (void(*)(GameInterface*))dlsym(dlHandle, "stopGame");
