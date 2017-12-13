@@ -3,13 +3,13 @@
 #include <unistd.h>
 
 Initialisation::Initialisation(void){
-  this->win = new sf::RenderWindow(sf::VideoMode(1000, 1000), "Nibller 42");
+  this->win = new sf::RenderWindow(sf::VideoMode(1000, 1000), "Nibller 42 SFML");
   return;
 }
 Initialisation::Initialisation(int w, int h) {
   this->h = h;
   this->w = w;
-  this->win = new sf::RenderWindow(sf::VideoMode(w, h), "Nibller 42");
+  this->win = new sf::RenderWindow(sf::VideoMode(w, h), "Nibller 42 SFML");
   this->event = new sf::Event();
   this->isStart = false;
 
@@ -42,8 +42,8 @@ Initialisation &Initialisation::operator=(Initialisation const & src) {
 
 int Initialisation::interval(int order) const {
 
-usleep(50000);
-return order;
+  usleep(50000);
+  return order;
 }
 
 int Initialisation::draw(Snake *snake) const {
@@ -82,19 +82,19 @@ int Initialisation::draw(Snake *snake) const {
   }
   sf::Text text;
   sf::Font font;
-if (!font.loadFromFile("ressources/arial.ttf"))
-{
-  std::cout << "SFML Erreur when load Font" << '\n';
-  exit(EXIT_FAILURE);
-}
+  if (!font.loadFromFile("ressources/arial.ttf"))
+  {
+    std::cout << "SFML Erreur when load Font" << '\n';
+    exit(EXIT_FAILURE);
+  }
   text.setFont(font);
   std::stringstream score;
   score << "Score: " << std::to_string(snake->score);
   std::string s = score.str();
   text.setString(s);
-  text.setPosition(100,100);
+  text.setPosition(10,10);
   text.setCharacterSize(24);
-  text.setFillColor(sf::Color::Red);
+  text.setFillColor(sf::Color::White);
   text.setStyle(sf::Text::Bold);
   this->win->draw(text);
   this->win->display();
@@ -103,19 +103,27 @@ if (!font.loadFromFile("ressources/arial.ttf"))
 void Initialisation::updateIsStart() {
   this->isStart = !this->isStart;
 }
+void Initialisation::forcePause() const {
+  Initialisation* ptr =  const_cast<Initialisation*>(this);
+  ptr->isStart = true;
+}
 
-int Initialisation::update() const {
+
+int Initialisation::update(Snake *part) const {
   sf::Event event;
   while (this->win->pollEvent(event))
   {
+  //  std::cout << this->win->pollEvent(event) << '\n';
     if (event.type == sf::Event::Closed) { this->win->close(); return -1; }
     if (event.type == sf::Event::KeyPressed) {
       if (event.key.code == sf::Keyboard::Escape) { this->win->close(); return -1; }
-      //std::cout << "keycode = " << event.key.code<< '\n';
-      if (event.key.code == 74 && this->isStart) { return 1; }
-      if (event.key.code == 73 && this->isStart) { return 2; }
-      if (event.key.code == 71 && this->isStart) { return 3; }
-      if (event.key.code == 72 && this->isStart) { return 4; }
+      std::cout << "keycode = " << event.key.code<< '\n';
+          std::cout << part->isMoving << event.key.code<< '\n';
+      if (event.key.code == 28) { return 201; }
+      if (event.key.code == 74 && this->isStart && !part->isMoving) { part->isMoving = true; return 1; }
+      if (event.key.code == 73 && this->isStart && !part->isMoving) { part->isMoving = true; return 2; }
+      if (event.key.code == 71 && this->isStart && !part->isMoving) { part->isMoving = true; return 3; }
+      if (event.key.code == 72 && this->isStart && !part->isMoving) { part->isMoving = true; return 4; }
       if (event.key.code == 58) { const_cast<Initialisation*>(this)->updateIsStart(); return 10; }
 
     }

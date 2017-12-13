@@ -12,7 +12,7 @@ Initialisation::Initialisation(int w, int h) {
   SDL_Init(SDL_INIT_VIDEO);
   this->h = h;
   this->w = w;
-  this->win = SDL_CreateWindow( "Nibller 42", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL);
+  this->win = SDL_CreateWindow( "Nibller 42 SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL);
   this->isStart = false;
 
 
@@ -75,7 +75,7 @@ int Initialisation::draw(Snake *snake) const {
 
   Initialisation* ptr =  const_cast<Initialisation*>(this);
   ptr->gameRender = SDL_CreateRenderer(this->win, -1, 0);
-  SDL_Surface * board = SDL_LoadBMP("ressources/background.bmp");
+  SDL_Surface * board = SDL_LoadBMP("ressources/grennBoard.bmp");
   SDL_Texture * textureBoard = SDL_CreateTextureFromSurface(this->gameRender, board);
 
 
@@ -99,7 +99,10 @@ int Initialisation::draw(Snake *snake) const {
 
   std::list<BodyList>::const_iterator start;
 
-  get_text_and_rect(this->gameRender, 0, 0, 30, 30, std::to_string(snake->score), font, &texture1, &rect1);
+  std::stringstream score;
+  score << "Score: " << std::to_string(snake->score);
+  std::string s = score.str();
+  get_text_and_rect(this->gameRender, 0, 0, 100, 30, s, font, &texture1, &rect1);
   SDL_RenderCopy(this->gameRender, textureBoard, NULL, NULL);
   SDL_RenderCopy(this->gameRender, texture1, NULL, &rect1);
 
@@ -123,26 +126,30 @@ void Initialisation::updateIsStart() {
   this->isStart = !this->isStart;
 }
 
-int Initialisation::update() const {
+void Initialisation::forcePause() const {
+  Initialisation* ptr =  const_cast<Initialisation*>(this);
+  ptr->isStart = true;
+}
+
+int Initialisation::update(Snake *part) const {
   SDL_Event event = {0};
   while (SDL_PollEvent(&event))
   {
     if (event.type == SDL_QUIT) {  SDL_Quit(); return -1; }
     if (event.type == SDL_KEYDOWN) {
       if (event.key.keysym.sym == SDLK_ESCAPE) {  SDL_Quit(); return -1; }
-      //std::cout << "keycode = " << event.key.code<< '\n';
-      if (event.key.keysym.sym == SDLK_1) { std::cout << "yoyo 1" << '\n';return 200; }
-      if (event.key.keysym.sym == SDLK_DOWN && this->isStart) { return 1; }
-      if (event.key.keysym.sym == SDLK_UP && this->isStart) { return 2; }
-      if (event.key.keysym.sym == SDLK_LEFT && this->isStart) { return 3; }
-      if (event.key.keysym.sym == SDLK_RIGHT && this->isStart) { return 4; }
+      if (event.key.keysym.sym == SDLK_1) { return 200; }
+      if (event.key.keysym.sym == SDLK_DOWN && this->isStart && !part->isMoving) { part->isMoving = true; return 1; }
+      if (event.key.keysym.sym == SDLK_UP && this->isStart && !part->isMoving) { part->isMoving = true; return 2; }
+      if (event.key.keysym.sym == SDLK_LEFT && this->isStart && !part->isMoving) { part->isMoving = true; return 3; }
+      if (event.key.keysym.sym == SDLK_RIGHT && this->isStart && !part->isMoving) { part->isMoving = true; return 4; }
       if (event.key.keysym.sym == SDLK_RETURN) {
 
         const_cast<Initialisation*>(this)->updateIsStart(); return 10; }
 
       }
     }
-    if (this->isStart) { return this->interval(100);}
+    if (this->isStart) { return this->interval(100); }
     else { return  -5; }
   }
 
@@ -151,11 +158,9 @@ int Initialisation::update() const {
   }
 
   Initialisation::~Initialisation(void) {
-    std::cout << "start of destCTUER" << '\n';
     SDL_DestroyRenderer(this->gameRender);
     SDL_DestroyRenderer(this->menuRender);
     SDL_DestroyWindow(this->win);
-    std::cout << "End of destCTUER" << '\n';
 
     //SDL_Quit();
     return;

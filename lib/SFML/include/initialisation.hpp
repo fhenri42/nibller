@@ -20,11 +20,12 @@ public:
   ~Initialisation(void);                // Destructeur de recopie
 
   Initialisation &operator=(Initialisation const & src);  // operator d'affecationt
-  int update() const;
+  int update(Snake *part) const;
   int draw(Snake *snake) const;
   int interval(int order) const;
   int drawMenu () const;
   void updateIsStart();
+  void forcePause() const;
   //void stopGame () const;
 private:
   int h;

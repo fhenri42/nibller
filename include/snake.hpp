@@ -36,6 +36,7 @@ public:
   Snake &operator=(Snake const & src);  // operator d'affecationt
   bool isRestart;
   int score;
+  bool isMoving;
 };
 
 #endif

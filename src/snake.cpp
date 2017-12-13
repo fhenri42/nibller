@@ -36,6 +36,7 @@ Snake::Snake(int w, int h) {
   this->reapt = &Snake::south;
   this->isRestart = false;
   this->score = 0;
+  this->isMoving = false;
   return;
 }
 
@@ -56,20 +57,27 @@ Snake::~Snake(void) {
 
 std::list<BodyList>::iterator Snake::nord(std::list<BodyList>::iterator body) {
   body->y = body->y - 20;
+  this->isMoving = false;
+
   return body;
 }
 std::list<BodyList>::iterator Snake::south(std::list<BodyList>::iterator body) {
   body->y = body->y + 20;
+  this->isMoving = false;
+
   return body;
 }
 
 std::list<BodyList>::iterator Snake::east(std::list<BodyList>::iterator body) {
   body->x = body->x + 20;
+  this->isMoving = false;
+
   return body;
 }
 
 std::list<BodyList>::iterator Snake::ouest(std::list<BodyList>::iterator body) {
   body->x = body->x - 20;
+  this->isMoving = false;
   return body;
 }
 
@@ -124,7 +132,7 @@ void Snake::movement(int wich, int w, int h) {
       tmpMaille.y = start->y;
       start->x = x;
       start->y = y;
-      if (newHeadPose.x <= tmpMaille.x + 0 && newHeadPose.x >= tmpMaille.x  - 0  && newHeadPose.y <= tmpMaille.y  + 0 && newHeadPose.y >= tmpMaille.y - 0) {
+      if (newHeadPose.x <= tmpMaille.x  && newHeadPose.x >= tmpMaille.x   && newHeadPose.y <= tmpMaille.y  && newHeadPose.y >= tmpMaille.y ) {
         std::cout << "on ce mange la que" << '\n';
         this->isRestart = true;
       }
