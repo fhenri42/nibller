@@ -6,8 +6,11 @@
 
 #include <iostream>
 #include <sstream>
-#include <SDL.h>
-#include <SDL_ttf.h>
+
+#include <ncurses.h>
+#include <future>
+#include <unistd.h>
+
 #include "../../../include/gameInterface.hpp"
 #include "../../../include/snake.hpp"
 
@@ -31,10 +34,10 @@ public:
 private:
   int h;
   int w;
-  SDL_Window    *win;
-  SDL_Event     *evenements;
-  SDL_Renderer  *menuRender;
-  SDL_Renderer  *gameRender;
+  // SDL_Window    *win;
+  // SDL_Event     *evenements;
+  // SDL_Renderer  *menuRender;
+  // SDL_Renderer  *gameRender;
   bool isStart;
 
 };

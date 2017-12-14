@@ -6,5 +6,9 @@ cd ../SDL/
 echo "SDL:"
 g++  -shared -fPIC -o bin/sdl.so -I include src/initialisation.cpp `sdl2-config --cflags --libs` -lSDL2_ttf
 echo g++  -shared -fPIC -o bin/sdl.so -I include src/initialisation.cpp `sdl2-config --cflags --libs` -lSDL2_ttf
+cd ../NCURSE/
+echo "Ncurse:"
+g++ -shared -fPIC -o bin/ncurse.so -I include src/initialisation.cpp -lncurses
+echo g++ -shared -fPIC -o bin/ncurse.so -I include src/initialisation.cpp -lncurses
 cd ../../
  # g++ main.cpp `sdl-config --cflags --libs` && ./a.out
