@@ -120,6 +120,7 @@ int Initialisation::update(Snake *part) const {
       std::cout << "keycode = " << event.key.code<< '\n';
           std::cout << part->isMoving << event.key.code<< '\n';
       if (event.key.code == 28) { return 201; }
+      if (event.key.code == 29) { return 202; }
       if (event.key.code == 74 && this->isStart && !part->isMoving) { part->isMoving = true; return 1; }
       if (event.key.code == 73 && this->isStart && !part->isMoving) { part->isMoving = true; return 2; }
       if (event.key.code == 71 && this->isStart && !part->isMoving) { part->isMoving = true; return 3; }

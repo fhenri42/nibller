@@ -7,23 +7,28 @@ Initialisation::Initialisation(void){
   return;
 }
 Initialisation::Initialisation(int w, int h) {
+  this->h = h;
+  this->w = w;
 
   initscr();			/* Start curses mode 		*/
-	raw();				/* Line buffering disabled	*/
-	keypad(stdscr, TRUE);		/* We get F1, F2 etc..		*/
-	noecho();			/* Don't echo() while we do getch */
-	curs_set(0); // hide cursor
-	notimeout(stdscr, TRUE);
-	scrollok(stdscr, FALSE);
+  raw();				/* Line buffering disabled	*/
+  keypad(stdscr, TRUE);		/* We get F1, F2 etc..		*/
+  noecho();			/* Don't echo() while we do getch */
+  curs_set(0); // hide cursor
+  notimeout(stdscr, TRUE);
+  scrollok(stdscr, TRUE);
   nodelay(stdscr, TRUE);
 
-	WINDOW *boite;
-	w = 50;
-	h = 70;
-	initscr();
-	boite= subwin(stdscr, w, h, 0, 0);
-	wborder(boite, '|', '|', '-', '-', '+', '+', '+', '+');
-	wrefresh(boite);
+  WINDOW *boite;
+  h = 100;
+  w = 50;
+  initscr();
+  boite= subwin(stdscr, w, h, 1, 1);
+  this->gameBoite = subwin(stdscr, w - 2, h - 2, 2, 2);
+  //wborder(this->gameBoite, '|', '|', '-', '-', '+', '+', '+', '+');
+  wborder(boite, '|', '|', '-', '-', '+', '+', '+', '+');
+  wrefresh(boite);
+  //wrefresh(this->gameBoite);
   return;
 }
 
@@ -39,28 +44,47 @@ Initialisation &Initialisation::operator=(Initialisation const & src) {
 
 int Initialisation::interval(int order) const {
 
-  //usleep(50000);
-  usleep(199000);
+  usleep(50000);
   return order;
 }
 
 int Initialisation::draw(Snake *snake) const {
-
-std::list<BodyList>::const_iterator start;
+  wclear(this->gameBoite);
+  std::list<BodyList>::const_iterator start;
   for (start = snake->bodyList.begin(); start != snake->end; ++start)
   {
 
     if (start->type == "fruit") {
+      std::stringstream y;
+      y << start->y;
+      short yNumber = atoi(y.str().substr(0, 2).c_str());
 
-      move(start->y, start->x);  // Déplace le curseur tout en bas à droite de l'écran
-  		addch('o');
-     }
-    else {
-      move(start->y, start->x);  // Déplace le curseur tout en bas à droite de l'écran
-      addch('#');
+      std::stringstream x;
+      x << start->x;
+      short xNumber = atoi(x.str().substr(0, 2).c_str());
+
+      mvwprintw(this->gameBoite, yNumber/2, xNumber, "o");
+
     }
+    else {
+      std::stringstream y;
+      y << start->y;
+      short yNumber = atoi(y.str().substr(0, 2).c_str());
+
+      std::stringstream x;
+      x << start->x;
+      short xNumber = atoi(x.str().substr(0, 2).c_str());
+    //  std::cout << xNumber << '\n';
+
+      mvwprintw(this->gameBoite, yNumber/2, xNumber, "#");
+
+      //    move(start->y, start->x);  // Déplace le curseur tout en bas à droite de l'écran
+      //    addch('#');
+    }
+    wrefresh(this->gameBoite);
+
   }
-  refresh();
+  wrefresh(this->gameBoite);
   // sf::Text text;
   // sf::Font font;
   // if (!font.loadFromFile("ressources/arial.ttf"))
@@ -92,19 +116,26 @@ void Initialisation::forcePause() const {
 
 
 int Initialisation::update(Snake *part) const {
-  char ch;
-  ch = getch();
+  int ch = getch();
   //std::cout << "Ch => "<<ch << '\n';
-  if (getch() == 27) {
+  if (ch == 27) {
+    std::cout << "ch"<<ch << '\n';
     endwin();
     exit(EXIT_FAILURE);
   }
-  if (getch() == KEY_DOWN) { part->isMoving = true; return 1; }
-  if (getch() == KEY_UP) { part->isMoving = true; return 2; }
-  // if (getch() == KEY_LEFT) { part->isMoving = true; return 1; }
-  // if (getch() == KEY_RIGHT) { part->isMoving = true; return 2; }
+  if (ch == KEY_DOWN && this->isStart && !part->isMoving) { part->isMoving = true; return 1; }
+  if (ch == KEY_UP && this->isStart && !part->isMoving) { part->isMoving = true; return 2; }
+  if (ch == KEY_LEFT && this->isStart && !part->isMoving) { part->isMoving = true; return 3; }
+  if (ch == KEY_RIGHT && this->isStart && !part->isMoving) { part->isMoving = true; return 4; }
+//  printw("TAMERE: %d",ch);
+  if(ch == 49 ) {
+    return 200;
+  }
+  if(ch == 50 ) {
+    return 201;
+  }
+  if (ch == 10) {
 
-  if (getch() == 10) {
     const_cast<Initialisation*>(this)->updateIsStart(); return 10;
   }
   // sf::Event event;

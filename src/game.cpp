@@ -61,6 +61,13 @@ void Game::current(GameInterface *iGame, void (*dell)(GameInterface*), int w, in
       iGame = this->realoadLib(w, h);
       iGame->forcePause();
     }
+    if (order == 202) {
+      this->currentLib = "lib/NCURSE/bin/ncurse.so";
+      iGame->forcePause();
+      dell(iGame);
+      iGame = this->realoadLib(w, h);
+      iGame->forcePause();
+    }
     if (order >= 0) {
       if (order == 1) { snake->movement(1,w, h); }
       else if (order == 2) { snake->movement(2,w, h); }

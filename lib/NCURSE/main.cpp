@@ -15,6 +15,7 @@ int main()
 	notimeout(stdscr, TRUE);
 	scrollok(stdscr, FALSE);
 
+
 	WINDOW *boite;
 	int w = 50;
 	int h = 70;
@@ -25,11 +26,14 @@ int main()
 
 	int i = 0;
 	int y = 0;
-
+	int ch = 0;
 	while (1) {
-		if (getch() == KEY_UP) { i++; }
-		if (getch() == KEY_DOWN) { y++; }
-		if (getch() == 27) {
+		ch =  getch();
+		if (ch == KEY_UP) { i--; }
+		if (ch == KEY_DOWN) { i++; }
+		if (ch == KEY_LEFT) { y--; }
+		if (ch == KEY_RIGHT) { y++; }
+		if (ch == 27) {
 			endwin();
 			exit(EXIT_FAILURE);
 		}
@@ -38,7 +42,6 @@ int main()
 		//usleep(50000);
 		refresh();
 	}
-	getch();
 endwin();
 return 0;
 }

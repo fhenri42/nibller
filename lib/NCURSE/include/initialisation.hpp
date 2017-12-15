@@ -39,6 +39,7 @@ private:
   // SDL_Renderer  *menuRender;
   // SDL_Renderer  *gameRender;
   bool isStart;
+  WINDOW *gameBoite;
 
 };
 

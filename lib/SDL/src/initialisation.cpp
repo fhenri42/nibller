@@ -139,6 +139,7 @@ int Initialisation::update(Snake *part) const {
     if (event.type == SDL_KEYDOWN) {
       if (event.key.keysym.sym == SDLK_ESCAPE) {  SDL_Quit(); return -1; }
       if (event.key.keysym.sym == SDLK_1) { return 200; }
+      if (event.key.keysym.sym == SDLK_3) { return 202; }
       if (event.key.keysym.sym == SDLK_DOWN && this->isStart && !part->isMoving) { part->isMoving = true; return 1; }
       if (event.key.keysym.sym == SDLK_UP && this->isStart && !part->isMoving) { part->isMoving = true; return 2; }
       if (event.key.keysym.sym == SDLK_LEFT && this->isStart && !part->isMoving) { part->isMoving = true; return 3; }
