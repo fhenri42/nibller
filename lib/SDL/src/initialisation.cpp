@@ -144,11 +144,8 @@ int Initialisation::update(Snake *part) const {
       if (event.key.keysym.sym == SDLK_UP && this->isStart && !part->isMoving) { part->isMoving = true; return 2; }
       if (event.key.keysym.sym == SDLK_LEFT && this->isStart && !part->isMoving) { part->isMoving = true; return 3; }
       if (event.key.keysym.sym == SDLK_RIGHT && this->isStart && !part->isMoving) { part->isMoving = true; return 4; }
-      if (event.key.keysym.sym == SDLK_RETURN) {
-
-        const_cast<Initialisation*>(this)->updateIsStart(); return 10; }
-
-      }
+      if (event.key.keysym.sym == SDLK_RETURN) { const_cast<Initialisation*>(this)->updateIsStart(); return 10; }
+    }
     }
     if (this->isStart) { return this->interval(100); }
     else { return  -5; }

@@ -102,10 +102,7 @@ void Snake::movement(int wich, int w, int h) {
       else { start = (this->*reapt)(start); }
       newHeadPose.x = start->x;
       newHeadPose.y = start->y;
-      if(newHeadPose.x < 20 || newHeadPose.y < 20 || newHeadPose.x > w - 20 || newHeadPose.y > h -20 ) {
-        std::cout << w << '\n';
-        std::cout << h << '\n';
-        std::cout << "Sorti de map" << '\n';
+      if (newHeadPose.x < 20 || newHeadPose.y < 20 || newHeadPose.x > w - 20 || newHeadPose.y > h -20 ) {
         this->isRestart = true;
       }
 
@@ -133,7 +130,6 @@ void Snake::movement(int wich, int w, int h) {
       start->x = x;
       start->y = y;
       if (newHeadPose.x <= tmpMaille.x  && newHeadPose.x >= tmpMaille.x   && newHeadPose.y <= tmpMaille.y  && newHeadPose.y >= tmpMaille.y ) {
-        std::cout << "on ce mange la que" << '\n';
         this->isRestart = true;
       }
     }

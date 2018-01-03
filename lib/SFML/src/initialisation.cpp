@@ -113,12 +113,9 @@ int Initialisation::update(Snake *part) const {
   sf::Event event;
   while (this->win->pollEvent(event))
   {
-  //  std::cout << this->win->pollEvent(event) << '\n';
     if (event.type == sf::Event::Closed) { this->win->close(); return -1; }
     if (event.type == sf::Event::KeyPressed) {
       if (event.key.code == sf::Keyboard::Escape) { this->win->close(); return -1; }
-      std::cout << "keycode = " << event.key.code<< '\n';
-          std::cout << part->isMoving << event.key.code<< '\n';
       if (event.key.code == 28) { return 201; }
       if (event.key.code == 29) { return 202; }
       if (event.key.code == 74 && this->isStart && !part->isMoving) { part->isMoving = true; return 1; }
