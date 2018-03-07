@@ -36,10 +36,12 @@ void Game::current(GameInterface *iGame, void (*dell)(GameInterface*), int w, in
   Snake         *snake = new Snake(w, h);
 
   int order = -2;
-  while (order != -1) {
 
+  while (order != -1) {
+    /* Get order from libs */
     order = iGame->update(snake);
 
+    /* Check if we need to stop the game */
     if (snake->isRestart) {
       dell(iGame);
       iGame = this->realoadLib(w, h);
@@ -47,33 +49,33 @@ void Game::current(GameInterface *iGame, void (*dell)(GameInterface*), int w, in
       snake = new Snake(w, h);
       order = -2;
     }
-    if (order == 200) {
-      this->currentLib = "lib/SFML/bin/sfml.so";
+
+    /* Check if the user ask to change lib */
+    /* If the user change lib reset params */
+    if (order >= 200 && order <= 202) {
+    switch (order) {
+      case 200:
+        this->currentLib = "lib/SFML/bin/sfml.so";
+        break;
+      case 201:
+        this->currentLib = "lib/SDL/bin/sdl.so";
+        break;
+      case 202:
+        this->currentLib = "lib/NCURSE/bin/ncurse.so";
+        break;
+      default:
+        this->currentLib = "lib/SFML/bin/sfml.so";
+        break;
+    }
       iGame->forcePause();
       dell(iGame);
       iGame = this->realoadLib(w, h);
       iGame->forcePause();
     }
-    if (order == 201) {
-      this->currentLib = "lib/SDL/bin/sdl.so";
-      iGame->forcePause();
-      dell(iGame);
-      iGame = this->realoadLib(w, h);
-      iGame->forcePause();
-    }
-    if (order == 202) {
-      this->currentLib = "lib/NCURSE/bin/ncurse.so";
-      iGame->forcePause();
-      dell(iGame);
-      iGame = this->realoadLib(w, h);
-      iGame->forcePause();
-    }
+
+    /* Generate borad and draw it */
     if (order >= 0) {
-      if (order == 1) { snake->movement(1,w, h); }
-      else if (order == 2) { snake->movement(2,w, h); }
-      else if (order == 3) { snake->movement(3,w, h); }
-      else if (order == 4) { snake->movement(4,w, h); }
-      else if (order == 100) { snake->movement(100,w ,h); }
+      snake->movement(order,w, h);
       if (order != 0) { iGame->draw(snake); }
     } else {
       iGame->drawMenu();

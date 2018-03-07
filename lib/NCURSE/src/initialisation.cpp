@@ -6,11 +6,11 @@ Initialisation::Initialisation(void){
 
   return;
 }
-Initialisation::Initialisation(int w, int h) {
+Initialisation::Initialisation(int h, int w) {
   this->h = h;
   this->w = w;
   this->isStart = false;
-  
+
 
   initscr();			/* Start curses mode 		*/
   raw();				/* Line buffering disabled	*/
