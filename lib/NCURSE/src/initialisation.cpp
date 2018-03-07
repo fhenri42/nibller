@@ -7,29 +7,35 @@ Initialisation::Initialisation(void){
   return;
 }
 Initialisation::Initialisation(int h, int w) {
-  this->h = h;
-  this->w = w;
-  this->isStart = false;
+
+    this->h = h;
+    this->w = w;
+    this->isStart = false;
 
 
-  initscr();			/* Start curses mode 		*/
-  raw();				/* Line buffering disabled	*/
-  keypad(stdscr, TRUE);		/* We get F1, F2 etc..		*/
-  noecho();			/* Don't echo() while we do getch */
-  curs_set(0); // hide cursor
-  notimeout(stdscr, TRUE);
-  scrollok(stdscr, TRUE);
-  nodelay(stdscr, TRUE);
+    initscr();			/* Start curses mode 		*/
+    raw();				/* Line buffering disabled	*/
+    keypad(stdscr, TRUE);		/* We get F1, F2 etc..		*/
+    noecho();			/* Don't echo() while we do getch */
+    curs_set(0); // hide cursor
+    notimeout(stdscr, TRUE);
+    scrollok(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
 
 
-  h = h / 10;
-  w = w / 20;
+    h = h / 10;
+    w = w / 20;
 
-  initscr();
-  this->gameBoite = subwin(stdscr, w, h, 1, 1);
-  wborder(this->gameBoite, '|', '|', '-', '-', '+', '+', '+', '+');
-  wrefresh(this->gameBoite);
-  return;
+    int mx=0, my=0;
+    getmaxyx(stdscr, mx, my);
+    if (mx + 20 < h || my + 20 < w) { throw std::logic_error( "Size of window is too little."); }
+
+    initscr();
+    this->gameBoite = subwin(stdscr, w, h, 1, 1);
+    wborder(this->gameBoite, '|', '|', '-', '-', '+', '+', '+', '+');
+    wrefresh(this->gameBoite);
+
+return;
 }
 
 Initialisation::Initialisation(Initialisation const &src) {
@@ -64,7 +70,7 @@ int Initialisation::draw(Snake *snake) const {
   return 0;
 }
 void Initialisation::updateIsStart() {
-//  this->isStart = true;
+  //  this->isStart = true;
   this->isStart = !this->isStart;
 }
 void Initialisation::forcePause() const {
@@ -95,12 +101,20 @@ int Initialisation::drawMenu() const {
 }
 
 Initialisation::~Initialisation(void) {
-	endwin();
+  endwin();
   return;
 }
 
 Initialisation *createBorde(int h, int w) {
+try {
   return new Initialisation(h,w);
+} catch (const std::exception & e) {
+  endwin();
+
+  std::cerr << e.what();
+  exit(EXIT_FAILURE);
+
+}
 }
 
 void stopGame(Initialisation *game) {
