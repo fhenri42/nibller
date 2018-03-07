@@ -81,7 +81,9 @@ void Initialisation::forcePause() const {
 
 int Initialisation::update(Snake *part) const {
   int ch = getch();
-  if (ch == 27) { endwin(); throw std::logic_error( "User asks to quit game.");}
+  if (ch == 27) {
+    endwin();
+    exit(EXIT_FAILURE);}
   if (ch == KEY_DOWN && this->isStart && !part->isMoving) { part->isMoving = true; return 1; }
   if (ch == KEY_UP && this->isStart && !part->isMoving) { part->isMoving = true; return 2; }
   if (ch == KEY_LEFT && this->isStart && !part->isMoving) { part->isMoving = true; return 3; }

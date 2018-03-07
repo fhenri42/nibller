@@ -12,19 +12,27 @@ Initialisation::Initialisation(int w, int h) {
   SDL_Init(SDL_INIT_VIDEO);
   this->h = h;
   this->w = w;
-  this->win = SDL_CreateWindow( "Nibller 42 SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL);
+  if (!(this->win = SDL_CreateWindow( "Nibller 42 SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL))){
+    this->~Initialisation();
+    throw std::logic_error( "SDL Erreur when create window.");
+  }
   this->isStart = false;
 
+  if (!(this->menuRender = SDL_CreateRenderer(this->win, -1, 0))){
+    this->~Initialisation();
+    throw std::logic_error( "SDL Erreur when create menu.");
+  }
 
-  this->menuRender = SDL_CreateRenderer(this->win, -1, 0);
   SDL_Surface * image = SDL_LoadBMP("ressources/menu.bmp");
+  if (!image){
+    this->~Initialisation();
+    throw std::logic_error( "SDL Erreur when load image.");
+  }
   SDL_Texture * texture = SDL_CreateTextureFromSurface(this->menuRender, image);
   SDL_RenderCopy(this->menuRender, texture, NULL, NULL);
   SDL_RenderPresent(this->menuRender);
   this->gameRender = NULL;
-  // SDL_DestroyTexture(texture);
-  // SDL_FreeSurface(image);
-  // SDL_DestroyRenderer(renderer);
+
   return;
 }
 
@@ -69,17 +77,31 @@ int Initialisation::draw(Snake *snake) const {
 
   TTF_Init();
   TTF_Font *font = TTF_OpenFont("ressources/arial.ttf", 65);
+  if (!font){
+    this->~Initialisation();
+    throw std::logic_error( "SDL Erreur when trying to open font.");
+  }
   SDL_Rect rect1;
   SDL_Texture *texture1;
 
 
   Initialisation* ptr =  const_cast<Initialisation*>(this);
   ptr->gameRender = SDL_CreateRenderer(this->win, -1, 0);
+  if (!ptr){
+    this->~Initialisation();
+    throw std::logic_error( "SDL Erreur when create ptr initialisation.");
+  }
   SDL_Surface * board = SDL_LoadBMP("ressources/grennBoard.bmp");
+  if (!board){
+    this->~Initialisation();
+    throw std::logic_error( "SDL Erreur when load board.");
+  }
   SDL_Texture * textureBoard = SDL_CreateTextureFromSurface(this->gameRender, board);
-
-
   SDL_Surface * frut = SDL_LoadBMP("ressources/bana.bmp");
+  if (!frut){
+    this->~Initialisation();
+    throw std::logic_error( "SDL Erreur when load fruit.");
+  }
   SDL_Texture * texturefrut = SDL_CreateTextureFromSurface(this->gameRender, frut);
   SDL_Rect SrcR;
   SDL_Rect DestR;
@@ -94,9 +116,11 @@ int Initialisation::draw(Snake *snake) const {
   DestR.h = 20;
 
   SDL_Surface * body = SDL_LoadBMP("ressources/body.bmp");
+  // if (!body){
+  //   this->~Initialisation();
+  //   throw std::logic_error( "SDL Erreur when load body.");
+  // }
   SDL_Texture * textureBody = SDL_CreateTextureFromSurface(this->gameRender, body);
-
-
   std::list<BodyList>::const_iterator start;
 
   std::stringstream score;
@@ -165,8 +189,13 @@ int Initialisation::update(Snake *part) const {
   }
 
   Initialisation *createBorde(int h, int w) {
-    return new Initialisation(h,w);
-  }
+    try {
+      return new Initialisation(h,w);
+    } catch (const std::exception & e) {
+      std::cerr << e.what();
+      exit(EXIT_FAILURE);
+    }
+    }
 
   void stopGame(Initialisation *game) {
     delete game;

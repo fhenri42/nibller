@@ -63,9 +63,9 @@ void Game::current(GameInterface *iGame, void (*dell)(GameInterface*), int w, in
       case 202:
         this->currentLib = "lib/NCURSE/bin/ncurse.so";
         break;
-      default:
-        this->currentLib = "lib/SFML/bin/sfml.so";
-        break;
+      // default:
+      //   this->currentLib = "lib/SFML/bin/sfml.so";
+      //   break;
     }
       iGame->forcePause();
       dell(iGame);
