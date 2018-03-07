@@ -15,8 +15,8 @@ Initialisation::Initialisation(int w, int h) {
 
   sf::Texture menu;
   if (!menu.loadFromFile("ressources/menu.png")) {
-    std::cout << "SFML Erreur when load menu" << '\n';
-    exit(EXIT_FAILURE);
+    this->win->close();
+    throw std::logic_error( "SFML Erreur when load menu");
   }
   this->win->isOpen();
   sf::Sprite background;
@@ -53,17 +53,17 @@ int Initialisation::draw(Snake *snake) const {
   sf::Texture board;
 
   if (!textureBody.loadFromFile("ressources/body.jpg")) {
-    std::cout << "SFML Erreur when load textureBody" << '\n';
-    exit(EXIT_FAILURE);
+    this->win->close();
+    throw std::logic_error( "SFML Erreur when load textureBody");
   }
   if (!texturefrut.loadFromFile("ressources/bana.png")) {
-    std::cout << "SFML Erreur when load textureBana" << '\n';
-    exit(EXIT_FAILURE);
+    this->win->close();
+    throw std::logic_error( "SFML Erreur when load textureBana");
   }
 
   if (!board.loadFromFile("ressources/background.jpg")) {
-    std::cout << "SFML Erreur when load board" << '\n';
-    exit(EXIT_FAILURE);
+    this->win->close();
+    throw std::logic_error( "SFML Erreur when load board");
   }
 
   std::list<BodyList>::const_iterator start;
@@ -84,8 +84,8 @@ int Initialisation::draw(Snake *snake) const {
   sf::Font font;
   if (!font.loadFromFile("ressources/arial.ttf"))
   {
-    std::cout << "SFML Erreur when load Font" << '\n';
-    exit(EXIT_FAILURE);
+    this->win->close();
+    throw std::logic_error( "SFML Erreur when load Font");
   }
   text.setFont(font);
   std::stringstream score;
@@ -140,8 +140,13 @@ Initialisation::~Initialisation(void) {
 }
 
 Initialisation *createBorde(int h, int w) {
-  return new Initialisation(h,w);
-}
+  try {
+    return new Initialisation(h,w);
+  } catch (const std::exception & e) {
+    std::cerr << e.what();
+    exit(EXIT_FAILURE);
+  }
+  }
 
 void stopGame(Initialisation *game) {
   delete game;
